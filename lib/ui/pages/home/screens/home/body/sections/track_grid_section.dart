@@ -14,7 +14,7 @@ class FavoriteTrackGridSection extends StatelessWidget {
     return Consumer2<SessionController, FavoritesController>(
       builder: (context, sessionController, favoritesController, child) {
         final List<TrackModel> tracks = favoritesController.favoriteTracks;
-        // Se limita a los primeros 4 ítems.
+
         final limitedTracks = tracks.take(4).toList();
 
         return ListView(
@@ -22,7 +22,6 @@ class FavoriteTrackGridSection extends StatelessWidget {
           shrinkWrap: true,
           padding: EdgeInsets.zero,
           children: [
-            // Título de la sección.
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
               child: Text(
@@ -38,9 +37,7 @@ class FavoriteTrackGridSection extends StatelessWidget {
                     limitedTracks.length,
                     (index) => TrackItem(
                       track: limitedTracks[index],
-                      onFavoriteInitialized: (trackId, isFavorite) {
-                        // Agrega la lógica de inicialización si es necesaria.
-                      },
+                      onFavoriteInitialized: (trackId, isFavorite) {},
                       onFavoriteChanged: (trackId) {
                         final currentFav =
                             limitedTracks[index].favorite ?? false;

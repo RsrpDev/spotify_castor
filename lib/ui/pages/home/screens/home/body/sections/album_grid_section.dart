@@ -14,7 +14,7 @@ class FavoriteAlbumGridSection extends StatelessWidget {
     return Consumer2<SessionController, FavoritesController>(
       builder: (context, sessionController, favoritesController, child) {
         final List<AlbumModel> albums = favoritesController.favoriteAlbums;
-        // Limitar a 4 elementos
+
         final limitedAlbums = albums.take(4).toList();
 
         return ListView(
@@ -22,7 +22,6 @@ class FavoriteAlbumGridSection extends StatelessWidget {
           shrinkWrap: true,
           padding: EdgeInsets.zero,
           children: [
-            // Título de la sección
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
               child: Text(
@@ -38,9 +37,7 @@ class FavoriteAlbumGridSection extends StatelessWidget {
                     limitedAlbums.length,
                     (index) => AlbumItem(
                       album: limitedAlbums[index],
-                      onFavoriteInitialized: (albumId, isFavorite) {
-                        // Lógica opcional de inicialización
-                      },
+                      onFavoriteInitialized: (albumId, isFavorite) {},
                       onFavoriteChanged: (albumId) {
                         final currentFav =
                             limitedAlbums[index].favorite ?? false;

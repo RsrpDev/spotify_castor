@@ -38,7 +38,6 @@ class _HomePageHomeScreenBodyState extends State<HomePageHomeScreenBody> {
             playlistController,
             child,
           ) {
-            // Inicializamos los favoritos si aún no se han cargado
             if (!favoritesController.favoritesInitialized) {
               favoritesController.initFavorites(
                 token: sessionController.token,
@@ -53,7 +52,6 @@ class _HomePageHomeScreenBodyState extends State<HomePageHomeScreenBody> {
               hasFavoritesContent = true;
             }
 
-            // Una vez cargados los favoritos, se inicializan las playlists
             if (hasFavoritesContent && !initialized) {
               initialized = true;
               playlistController.initializePlaylists(
@@ -62,7 +60,6 @@ class _HomePageHomeScreenBodyState extends State<HomePageHomeScreenBody> {
               );
             }
 
-            // Se marca que ya hay playlists listos
             if (playlistController.playlistsInitialized &&
                 (!hasPlaylistsContent &&
                     playlistController.playlists.isNotEmpty)) {
@@ -127,7 +124,7 @@ class _HomePageHomeScreenBodyState extends State<HomePageHomeScreenBody> {
                     ),
                   ),
                 ),
-                // Muestra un loader hasta que las playlists se hayan inicializado
+
                 !playlistController.playlistsInitialized
                     ? const Center(
                         child: Padding(
@@ -140,7 +137,6 @@ class _HomePageHomeScreenBodyState extends State<HomePageHomeScreenBody> {
                           padding: const EdgeInsets.only(top: 8, bottom: 64),
                           children: hasPlaylistsContent
                               ? [
-                                  // Se usan ambas secciones para mostrar las playlists en distintos formatos
                                   PlaylistGridSection(),
                                   FavoriteAlbumGridSection(),
                                   FavoriteArtistGridSection(),

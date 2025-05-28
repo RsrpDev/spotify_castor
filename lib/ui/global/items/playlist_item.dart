@@ -29,7 +29,6 @@ class _PlaylistItemState extends State<PlaylistItem> {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        // Como spotifyUri es un String no nulo, basta verificar que no esté vacío.
         if (widget.playlist.spotifyUri.isNotEmpty) {
           debugPrint("Launching Uri: ${widget.playlist.spotifyUri}");
           launchUrl(Uri.parse(widget.playlist.spotifyUri));
@@ -38,7 +37,6 @@ class _PlaylistItemState extends State<PlaylistItem> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Sección de imagen con botón para marcar como favorito.
           Stack(
             children: [
               AspectRatio(
@@ -67,67 +65,76 @@ class _PlaylistItemState extends State<PlaylistItem> {
                     width: 48,
                     height: 48,
                     child: Consumer2<SessionController, FavoritesController>(
-                      builder: (context, sessionController, favoritesController, child) {
-                        if (!initialized) {
-                          initialized = true;
-                          // Si 'favorite' es null significa que aun no se ha inicializado.
-                          if (widget.playlist.favorite == null) {
-                            favoritesController.checkFavoritePlaylist(
-                              token: sessionController.token,
-                              playlistId: widget.playlist.id,
-                              onSuccess: (bool isFavorite) {
-                                widget.onFavoriteInitialized(
-                                  widget.playlist.id,
-                                  isFavorite,
+                      builder:
+                          (
+                            context,
+                            sessionController,
+                            favoritesController,
+                            child,
+                          ) {
+                            if (!initialized) {
+                              initialized = true;
+
+                              if (widget.playlist.favorite == null) {
+                                favoritesController.checkFavoritePlaylist(
+                                  token: sessionController.token,
+                                  playlistId: widget.playlist.id,
+                                  onSuccess: (bool isFavorite) {
+                                    widget.onFavoriteInitialized(
+                                      widget.playlist.id,
+                                      isFavorite,
+                                    );
+                                  },
                                 );
-                              },
-                            );
-                          }
-                        }
-                        // Usamos un valor local que asume "false" si no se ha inicializado.
-                        final isFav = widget.playlist.favorite ?? false;
-                        return IconButton(
-                          onPressed: () {
-                            if (isFav) {
-                              favoritesController.removeFavoritePlaylist(
-                                token: sessionController.token,
-                                playlistId: widget.playlist.id,
-                                onSuccess: () {
-                                  widget.onFavoriteChanged(widget.playlist.id);
-                                },
-                              );
-                            } else {
-                              favoritesController.addFavoritePlaylist(
-                                token: sessionController.token,
-                                playlistId: widget.playlist.id,
-                                playlistData: widget
-                                    .playlist, // Agregado para cumplir con el parámetro requerido
-                                onSuccess: () {
-                                  widget.onFavoriteChanged(widget.playlist.id);
-                                },
-                              );
+                              }
                             }
+
+                            final isFav = widget.playlist.favorite ?? false;
+                            return IconButton(
+                              onPressed: () {
+                                if (isFav) {
+                                  favoritesController.removeFavoritePlaylist(
+                                    token: sessionController.token,
+                                    playlistId: widget.playlist.id,
+                                    onSuccess: () {
+                                      widget.onFavoriteChanged(
+                                        widget.playlist.id,
+                                      );
+                                    },
+                                  );
+                                } else {
+                                  favoritesController.addFavoritePlaylist(
+                                    token: sessionController.token,
+                                    playlistId: widget.playlist.id,
+                                    playlistData: widget.playlist,
+                                    onSuccess: () {
+                                      widget.onFavoriteChanged(
+                                        widget.playlist.id,
+                                      );
+                                    },
+                                  );
+                                }
+                              },
+                              padding: EdgeInsets.zero,
+                              constraints: const BoxConstraints(
+                                maxWidth: 40,
+                                maxHeight: 40,
+                              ),
+                              icon: Icon(
+                                isFav
+                                    ? Icons.favorite_rounded
+                                    : Icons.favorite_outline_rounded,
+                                color: isFav ? Colors.green : Colors.grey,
+                              ),
+                            );
                           },
-                          padding: EdgeInsets.zero,
-                          constraints: const BoxConstraints(
-                            maxWidth: 40,
-                            maxHeight: 40,
-                          ),
-                          icon: Icon(
-                            isFav
-                                ? Icons.favorite_rounded
-                                : Icons.favorite_outline_rounded,
-                            color: isFav ? Colors.green : Colors.grey,
-                          ),
-                        );
-                      },
                     ),
                   ),
                 ),
               ),
             ],
           ),
-          // Información de la playlist: nombre y descripción.
+
           Padding(
             padding: const EdgeInsets.only(top: 16, bottom: 3),
             child: Text(

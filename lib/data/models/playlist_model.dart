@@ -27,7 +27,7 @@ class PlaylistModel {
       images: (data['images'] as List<dynamic>)
           .map((img) => img['url'] as String)
           .toList(),
-      favorite: null, // No inicializado
+      favorite: null,
       spotifyUri: uri,
     );
   }

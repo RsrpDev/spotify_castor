@@ -326,7 +326,6 @@ class FavoritesController extends Api with ChangeNotifier {
     required String playlistId,
     required Function(bool isFavorite) onSuccess,
   }) {
-    // Se busca si la playlist con el ID proporcionado está en la lista de favoritas
     bool isFav = _favoritePlaylists.any(
       (playlist) => playlist.id == playlistId,
     );
@@ -335,7 +334,7 @@ class FavoritesController extends Api with ChangeNotifier {
 
   void getUserFavoritePlaylists({required String token, int? offset}) {
     getQuery(
-      route: Api.getUserPlaylistsRoute, // O la ruta correspondiente.
+      route: Api.getUserPlaylistsRoute,
       headers: {"Authorization": "Bearer $token"},
       parameters: {
         "limit": "20",
@@ -347,7 +346,6 @@ class FavoritesController extends Api with ChangeNotifier {
           data["items"].length,
           (index) => PlaylistModel.fromJson(data: data["items"][index]),
         );
-        // La lógica de actualización de la lista puede ser:
         if (offset == null) {
           for (var item in fetchedItems) {
             if (!_favoritePlaylists.any((playlist) => playlist.id == item.id)) {
@@ -372,7 +370,6 @@ class FavoritesController extends Api with ChangeNotifier {
       route: "/v1/playlists/$playlistId/followers",
       headers: {"Authorization": "Bearer $token"},
       onSuccess: (_) {
-        // Agregamos el modelo completo si aún no está en la lista.
         if (!_favoritePlaylists.any((playlist) => playlist.id == playlistId)) {
           _favoritePlaylists.add(playlistData);
         }

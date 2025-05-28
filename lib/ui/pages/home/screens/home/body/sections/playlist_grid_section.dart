@@ -31,7 +31,6 @@ class PlaylistGridSection extends StatelessWidget {
               shrinkWrap: true,
               padding: EdgeInsets.zero,
               children: [
-                // Título de la sección.
                 Row(
                   children: [
                     Expanded(
